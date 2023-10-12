@@ -1,3 +1,6 @@
 offline: true
 skip_list:
   - '403'
+exclude_paths:
+  - /molecule/
+  - /changelogs/
