@@ -1,0 +1,6 @@
+---
+- name: Include the install playbook
+  ansible.builtin.import_playbook: domenickd3.getting_started.install
+
+- name: Include the configure playbook
+  ansible.builtin.import_playbook: domenickd3.getting_started.configure

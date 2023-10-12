@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: requirements.yml
+    collection-file: requirements.yml
+driver:
+  name: docker
+platforms:
+  - name: ubuntu
+    image: ubuntu:22.04
+    pre_build_image: false
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      verbosity: 2
+scenario:
+  name: default
+verifier:
+  name: ansible

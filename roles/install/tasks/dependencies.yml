@@ -1,0 +1,5 @@
+---
+# TODO: modify this to ansible 2.15 & install ansible from source
+- name: Verify that our ansible version is 2.10 or higher
+  ansible.builtin.assert:
+    that: "{{ ansible_version.full is version('2.10', '>=') }}"

@@ -1,0 +1,23 @@
+---
+- name: Verify dependencies
+  ansible.builtin.import_tasks: dependencies.yml
+  tags:
+    - dependencies
+
+- name: Import tasks related to Ubuntu setup
+  become: true
+  block:
+    - name: Execute apt-get initial setup tasks
+      ansible.builtin.import_tasks: apt-setup.yml
+    - name: Execute tasks to install packages via apt
+      ansible.builtin.import_tasks: packages.yml
+      tags:
+        - packages
+    - name: Execute tasks to install applications
+      ansible.builtin.import_tasks: applications.yml
+      tags:
+        - applications
+    - name: Execute tasks to install languages
+      ansible.builtin.import_tasks: languages.yml
+      tags:
+        - languages

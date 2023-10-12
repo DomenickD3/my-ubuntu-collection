@@ -1,0 +1,33 @@
+---
+- name: Apt-setup tasks
+  when: not ansible_check_mode
+  block:
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+        autoremove: true
+        autoclean: true
+        upgrade: "yes"
+        update_cache: true
+        cache_valid_time: 86400 # 1 day
+      async: 600
+      poll: 0
+      register: update_and_upgrade_async
+
+    - name: Wait until apt-get update/upgrade is complete (delay=5)
+      ansible.builtin.async_status:
+        jid: "{{ update_and_upgrade_async.ansible_job_id }}"
+      register: update_and_upgrade_async_result
+      until: update_and_upgrade_async_result.finished
+      retries: 120
+      delay: 5
+
+    - name: Output the result of update and upgade
+      ansible.builtin.debug:
+        var: update_and_upgrade_async_result
+
+    - name: Write the output of apt-get update/upgrade to /tmp/apt-get-output.log if changes ocurred # noqa: no-handler
+      ansible.builtin.copy:
+        content: "{{ update_and_upgrade_async_result.stdout }}"
+        dest: /tmp/apt-get-output.log
+        mode: "0644"
+      when: update_and_upgrade_async_result.changed

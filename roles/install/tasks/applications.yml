@@ -1,0 +1,71 @@
+---
+
+- name: Add apt signing key for "atom"
+  ansible.builtin.get_url:
+    url: https://packagecloud.io/AtomEditor/atom/gpgkey
+    dest: /etc/apt/keyrings/atom.asc
+    mode: "0644"
+
+- name: Add "atom" into repository sources list using specified filename
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/atom.asc] https://packagecloud.io/AtomEditor/atom/any/ any main
+    state: present
+    filename: atom
+
+- name: Install atom dependencies, namely "software-properties-common", and "apt-transport-https"
+  ansible.builtin.apt:
+    pkg:
+      - software-properties-common
+      - apt-transport-https
+
+- name: Install the package "atom"
+  ansible.builtin.apt:
+    name: atom
+
+- name: Install "Docker Desktop"
+  ansible.builtin.apt:
+    deb: https://desktop.docker.com/linux/main/amd64/docker-desktop-4.23.0-amd64.deb
+
+- name: Add apt signing key for "google chrome"
+  ansible.builtin.apt_key:
+    url: https://dl.google.com/linux/linux_signing_key.pub
+
+- name: Add "google chrome" into repository sources list using specified filename
+  ansible.builtin.apt_repository:
+    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+
+- name: Install "google chrome"
+  ansible.builtin.apt:
+    name: google-chrome-stable
+    state: latest
+    update_cache: true
+
+- name: Add firefox ppa repo
+  ansible.builtin.apt_repository:
+    repo: ppa:mozillateam/ppa
+    validate_certs: false
+
+- name: Install the package "firefox-esr"
+  ansible.builtin.apt:
+    name: firefox-esr
+
+- name: Add apt signing key for "atom"
+  ansible.builtin.get_url:
+    url: https://packagecloud.io/AtomEditor/atom/gpgkey
+    dest: /etc/apt/keyrings/atom.asc
+    mode: "0644"
+
+- name: Download discord debian binary
+  ansible.builtin.get_url:
+    url: https://discord.com/api/download?platform=linux&format=deb
+    dest: /tmp/discord.deb
+    mode: "0777"
+
+- name: Install the package "discord"
+  ansible.builtin.apt:
+    deb: /tmp/discord.deb
+
+- name: Install the package "telegram-desktop"
+  ansible.builtin.apt:
+    name: telegram-desktop

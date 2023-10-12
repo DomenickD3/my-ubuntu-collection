@@ -1,0 +1,61 @@
+---
+- name: Deploy dotfiles
+  tags:
+    - configure
+  vars:
+    dotfiles_dir: "{{ (ansible_env.HOME, 'Documents', '.dotfiles') | ansible.builtin.path_join }}"
+    backup_dir: "{{ (ansible_env.HOME, '.backup') | ansible.builtin.path_join }}"
+    bashrc: "{{ (ansible_env.HOME, '.bashrc') | ansible.builtin.path_join }}"
+    bashrc_backup: "{{ (backup_dir, '.bashrc') | ansible.builtin.path_join }}"
+    bash_aliases: "{{ (ansible_env.HOME, '.bash_aliases') | ansible.builtin.path_join }}"
+    bash_aliases_backup: "{{ (backup_dir, '.bash_aliases') | ansible.builtin.path_join }}"
+  block:
+    - name: Ensure dotfiles repository is cloned locally
+      ansible.builtin.git:
+        repo: https://github.com/DomenickD3/.dotfiles.git
+        dest: "{{ dotfiles_dir }}"
+        version: master
+        accept_hostkey: true
+      ignore_errors: "{{ ansible_check_mode }}"
+
+    - name: Create .backup directory to move system files before stow
+      ansible.builtin.file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Backup {{ bashrc }}
+      ansible.builtin.command: mv {{ bashrc }} {{ bashrc_backup }}
+      args:
+        creates: "{{ bashrc_backup }}"
+        removes: "{{ bashrc }}"
+
+    - name: Backup {{ bash_aliases }}
+      ansible.builtin.command: mv {{ bash_aliases }} {{ bash_aliases_backup }}
+      args:
+        creates: "{{ bash_aliases_backup }}"
+        removes: "{{ bash_aliases }}"
+
+    - name: Build modules list
+      ansible.builtin.find:
+        paths: "{{ dotfiles_dir }}"
+        file_type: directory
+        recurse: false
+      register: modules
+
+    - name: Stow dotfiles
+      with_items: "{{ modules.files }}"
+      environment:
+        STOW_DIR: "{{ dotfiles_dir }}"
+      ansible.builtin.command: stow -R {{ item.path | basename }} --target={{ ansible_env.HOME }}
+      changed_when: false
+
+    - name: Unstow dotfiles
+      with_items: "{{ modules.files }}"
+      environment:
+        STOW_DIR: "{{ dotfiles_dir }}"
+      ansible.builtin.command: stow -D {{ item.path | basename }} --target={{ ansible_env.HOME }}
+      changed_when: false
+      tags:
+        - unstow
+        - never

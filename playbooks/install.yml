@@ -1,0 +1,6 @@
+---
+- name: Install packages, applications, and languages
+  hosts: all
+  connection: local
+  roles:
+    - install

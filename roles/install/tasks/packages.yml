@@ -1,0 +1,104 @@
+---
+- name: Install the package "curl"
+  ansible.builtin.apt:
+    name: curl
+
+# BEGIN - DOCKER
+# https://docs.docker.com/engine/install/ubuntu/
+- name: Install docker dependencies, namely "ca-certificates", and "gnupg"
+  ansible.builtin.apt:
+    pkg:
+      - ca-certificates
+      - gnupg
+
+- name: Add GPG apt Key for "docker"
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
+
+- name: Add "docker" into sources repository sources list
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: Update apt and install (docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, docker-compose-plugin)
+  ansible.builtin.apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: latest
+    update_cache: true
+# END - DOCKER
+
+- name: Install the package "fuse"
+  ansible.builtin.apt:
+    name: git
+
+- name: Install the package "g++"
+  ansible.builtin.apt:
+    name: g++
+
+- name: Install the package "gcc"
+  ansible.builtin.apt:
+    name: gcc
+
+- name: Install the package "git"
+  ansible.builtin.apt:
+    name: git
+
+- name: Download nvim.appimage
+  ansible.builtin.get_url:
+    url: https://github.com/neovim/neovim/releases/download/v0.9.2/nvim.appimage
+    dest: /usr/local/bin
+    mode: "0777"
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: /usr/local/bin/nvim.appimage
+    dest: /usr/local/bin/nvim
+    owner: root
+    group: root
+    state: link
+
+- name: Add GPG Key for nodejs
+  ansible.builtin.get_url:
+    url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+    dest: /etc/apt/keyrings/nodesource.asc # armored keys use .asc extension
+    mode: "0644"
+
+- name: Add nodesource-repo
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64 signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_20.x nodistro main
+
+- name: Install the package "nodejs" # comes with npm
+  ansible.builtin.apt:
+    name: nodejs
+    update_cache: true
+
+- name: Install the package "openssl"
+  ansible.builtin.apt:
+    name: openssl
+
+- name: Install the package "sqlite3"
+  ansible.builtin.apt:
+    name: sqlite3
+
+- name: Install the package "stow"
+  ansible.builtin.apt:
+    name: stow
+
+- name: Install the package "tmux"
+  ansible.builtin.apt:
+    name: tmux
+
+- name: Install the package "vim"
+  ansible.builtin.apt:
+    name: vim
+
+- name: Install the package "wget"
+  ansible.builtin.apt:
+    name: wget
