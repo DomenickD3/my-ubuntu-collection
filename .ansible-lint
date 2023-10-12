@@ -4,3 +4,4 @@ skip_list:
 exclude_paths:
   - /molecule/
   - /changelogs/
+  - .pre-commit-config.yaml

@@ -1,11 +1,12 @@
 ---
 
+repos:
 - repo: https://github.com/ansible-community/ansible-lint.git
   rev: v6.20.3
   hooks:
     - id: ansible-lint
       entry: env ANSIBLE_ROLES_PATH=./roles ansible-lint
-      args: [-c, ./ansible/.ansible-lint, -v]
+      args: [-c, ./.ansible-lint, -v]
       files: \.(yml)$
       additional_dependencies:
         - ansible-core>=2.15.4
