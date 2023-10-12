@@ -4,7 +4,7 @@
   rev: v6.20.3
   hooks:
     - id: ansible-lint
-      entry: env ANSIBLE_ROLES_PATH=./ansible/roles ansible-lint
+      entry: env ANSIBLE_ROLES_PATH=./roles ansible-lint
       args: [-c, ./ansible/.ansible-lint, -v]
       files: \.(yml)$
       additional_dependencies:
