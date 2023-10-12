@@ -59,6 +59,6 @@ See [Ansible Using collections](https://docs.ansible.com/ansible/devel/user_guid
 - [Ansible Collections Checklist](https://github.com/ansible-collections/overview/blob/main/collection_requirements.rst)
 
 ## Licensing
-GNU General Public License v3.0 or later.
+GNU General Public License v2.0 or later.
 
-See [LICENSE](https://www.gnu.org/licenses/gpl-3.0.txt) to see the full text.
+See [LICENSE](https://www.gnu.org/licenses/gpl-2.0.txt) to see the full text.
