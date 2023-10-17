@@ -1,0 +1,2 @@
+---
+configure_user: "{{ undef(hint='You must specify your username') }}"

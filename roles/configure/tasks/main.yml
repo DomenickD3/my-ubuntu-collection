@@ -1,14 +1,39 @@
 ---
+#
+# /etc/passwd contains one line for each user account, with seven fields
+# delimited by colons (“:”). These fields are:
+#
+# key  login name
+# 0    optional encrypted password
+# 1    numerical user ID
+# 2    numerical group ID
+# 3    user name or comment field
+# 4    user home directory
+# 5    optional user command interpreter
+#
+# The reason we need to find home_directory this way is is because ansible_env is for the "connected" user, and
+# the connected user may not match the become_user
+- name: "Determine home directory of {{ configure_user }}"
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ configure_user }}"
+    split: ":"
+  tags:
+    - configure
+
 - name: Deploy dotfiles
   tags:
     - configure
   vars:
-    dotfiles_dir: "{{ (ansible_env.HOME, 'Documents', '.dotfiles') | ansible.builtin.path_join }}"
-    backup_dir: "{{ (ansible_env.HOME, '.backup') | ansible.builtin.path_join }}"
-    bashrc: "{{ (ansible_env.HOME, '.bashrc') | ansible.builtin.path_join }}"
+    home_dir: "{{ ansible_facts.getent_passwd[configure_user][4] }}"
+    dotfiles_dir: "{{ (home_dir, 'Documents', '.dotfiles') | ansible.builtin.path_join }}"
+    backup_dir: "{{ (home_dir, '.backup') | ansible.builtin.path_join }}"
+    bashrc: "{{ (home_dir, '.bashrc') | ansible.builtin.path_join }}"
     bashrc_backup: "{{ (backup_dir, '.bashrc') | ansible.builtin.path_join }}"
-    bash_aliases: "{{ (ansible_env.HOME, '.bash_aliases') | ansible.builtin.path_join }}"
+    bash_aliases: "{{ (home_dir, '.bash_aliases') | ansible.builtin.path_join }}"
     bash_aliases_backup: "{{ (backup_dir, '.bash_aliases') | ansible.builtin.path_join }}"
+  become: true
+  become_user: "{{ configure_user }}"
   block:
     - name: Ensure dotfiles repository is cloned locally
       ansible.builtin.git:
@@ -47,14 +72,14 @@
       with_items: "{{ modules.files }}"
       environment:
         STOW_DIR: "{{ dotfiles_dir }}"
-      ansible.builtin.command: stow -R {{ item.path | basename }} --target={{ ansible_env.HOME }}
+      ansible.builtin.command: stow -R {{ item.path | basename }} --target={{ home_dir }}
       changed_when: false
 
     - name: Unstow dotfiles
       with_items: "{{ modules.files }}"
       environment:
         STOW_DIR: "{{ dotfiles_dir }}"
-      ansible.builtin.command: stow -D {{ item.path | basename }} --target={{ ansible_env.HOME }}
+      ansible.builtin.command: stow -D {{ item.path | basename }} --target={{ home_dir }}
       changed_when: false
       tags:
         - unstow

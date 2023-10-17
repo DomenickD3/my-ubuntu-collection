@@ -1,5 +1,4 @@
 ---
-
 - name: Add apt signing key for "atom"
   ansible.builtin.get_url:
     url: https://packagecloud.io/AtomEditor/atom/gpgkey
@@ -22,10 +21,6 @@
   ansible.builtin.apt:
     name: atom
 
-- name: Install "Docker Desktop"
-  ansible.builtin.apt:
-    deb: https://desktop.docker.com/linux/main/amd64/docker-desktop-4.23.0-amd64.deb
-
 - name: Add apt signing key for "google chrome"
   ansible.builtin.apt_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
@@ -44,17 +39,12 @@
 - name: Add firefox ppa repo
   ansible.builtin.apt_repository:
     repo: ppa:mozillateam/ppa
-    validate_certs: false
+    update_cache: true
+  become: true
 
 - name: Install the package "firefox-esr"
   ansible.builtin.apt:
     name: firefox-esr
-
-- name: Add apt signing key for "atom"
-  ansible.builtin.get_url:
-    url: https://packagecloud.io/AtomEditor/atom/gpgkey
-    dest: /etc/apt/keyrings/atom.asc
-    mode: "0644"
 
 - name: Download discord debian binary
   ansible.builtin.get_url:

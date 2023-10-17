@@ -1,5 +1,4 @@
 ---
-
 - name: Add golang-go ppa repo
   ansible.builtin.apt_repository:
     repo: ppa:longsleep/golang-backports
@@ -8,6 +7,6 @@
   ansible.builtin.apt:
     name: golang-go
 
-- name: Install "python"
+- name: Install "python3"
   ansible.builtin.apt:
     name: python3
