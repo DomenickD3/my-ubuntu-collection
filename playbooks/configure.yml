@@ -1,6 +1,5 @@
 ---
 - name: Configure environment, download and stow dotifles
   hosts: all
-  connection: local
   roles:
     - configure

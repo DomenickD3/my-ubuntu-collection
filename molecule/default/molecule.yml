@@ -3,7 +3,6 @@ dependency:
   name: galaxy
   options:
     role-file: requirements.yml
-    collection-file: requirements.yml
 driver:
   name: docker
 platforms:
@@ -12,9 +11,13 @@ platforms:
     pre_build_image: false
 provisioner:
   name: ansible
-  config_options:
+  inventory:
+    group_vars:
+      all:
+        configure_user: "molecule-user"
+    config_options:
     defaults:
-      verbosity: 2
+      verbosity: 3
 scenario:
   name: default
 verifier:

@@ -1,9 +1,22 @@
 ---
+- name: Install the package "software-properties-common"
+  ansible.builtin.apt:
+    name: software-properties-common
+
+- name: Add ansible repository
+  ansible.builtin.apt_repository:
+    repo: ppa:ansible/ansible
+    update_cache: true
+    state: present
+
+- name: Install the package "ansible"
+  ansible.builtin.apt:
+    name: ansible
+
 - name: Install the package "curl"
   ansible.builtin.apt:
     name: curl
 
-# BEGIN - DOCKER
 # https://docs.docker.com/engine/install/ubuntu/
 - name: Install docker dependencies, namely "ca-certificates", and "gnupg"
   ansible.builtin.apt:
@@ -32,11 +45,10 @@
       - docker-compose-plugin
     state: latest
     update_cache: true
-# END - DOCKER
 
 - name: Install the package "fuse"
   ansible.builtin.apt:
-    name: git
+    name: fuse
 
 - name: Install the package "g++"
   ansible.builtin.apt:
@@ -67,7 +79,7 @@
 - name: Add GPG Key for nodejs
   ansible.builtin.get_url:
     url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
-    dest: /etc/apt/keyrings/nodesource.asc # armored keys use .asc extension
+    dest: /etc/apt/keyrings/nodesource.asc
     mode: "0644"
 
 - name: Add nodesource-repo
@@ -82,6 +94,10 @@
 - name: Install the package "openssl"
   ansible.builtin.apt:
     name: openssl
+
+- name: Install the package "pip"
+  ansible.builtin.apt:
+    name: pip
 
 - name: Install the package "sqlite3"
   ansible.builtin.apt:
