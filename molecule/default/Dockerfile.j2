@@ -12,6 +12,8 @@ ENV {{ var }} {{ value }}
 {% endfor %}
 {% endif %}
 
+# This is required if you need to run any appimages
+# otherwise they will exit with a 'fuse' error when called from within Docker
 ENV APPIMAGE_EXTRACT_AND_RUN=1
 
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y python3 sudo bash ca-certificates iproute2 python3-apt aptitude && rm -rf /var/lib/apt/lists/*;
