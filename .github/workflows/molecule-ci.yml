@@ -1,8 +1,16 @@
-on: push
+name: Molecule
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   Test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -10,3 +18,4 @@ jobs:
       - uses: gofrolist/molecule-action@v2
         with:
           molecule_working_dir: "${{ github.repository }}"
+          molecule_options: --debug
