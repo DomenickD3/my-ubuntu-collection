@@ -10,6 +10,7 @@
       async: 600
       poll: 0
       register: update_and_upgrade_async
+      changed_when: "'molecule-idempotence-notest' not in ansible_skip_tags"
 
     - name: Wait until apt-get update/upgrade is complete (delay=5)
       ansible.builtin.async_status:
@@ -22,10 +23,3 @@
     - name: Output the result of update and upgade
       ansible.builtin.debug:
         var: update_and_upgrade_async_result
-
-    - name: Write the output of apt-get update/upgrade to /tmp/apt-get-output.log if changes ocurred # noqa: no-handler
-      ansible.builtin.copy:
-        content: "{{ update_and_upgrade_async_result.stdout }}"
-        dest: /tmp/apt-get-output.log
-        mode: "0644"
-      when: update_and_upgrade_async_result.changed
