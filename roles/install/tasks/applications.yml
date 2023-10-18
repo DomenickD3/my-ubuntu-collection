@@ -27,7 +27,7 @@
 
 - name: Check if google chrome repository is already listed in sources
   ansible.builtin.stat:
-    path: /etc/apt/sources.list.d/google_chrome.list
+    path: /etc/apt/sources.list.d/google-chrome.list
   register: google_chrome_repo
 
 - name: Add "google chrome" into repository sources list using specified filename
