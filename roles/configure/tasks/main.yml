@@ -48,18 +48,21 @@
         path: "{{ backup_dir }}"
         state: directory
         mode: "0755"
+      register: created_backup_dir
 
     - name: Backup {{ bashrc }}
       ansible.builtin.command: mv {{ bashrc }} {{ bashrc_backup }}
       args:
         creates: "{{ bashrc_backup }}"
         removes: "{{ bashrc }}"
+      when: created_backup_dir.changed # noqa: no-handler
 
     - name: Backup {{ bash_aliases }}
       ansible.builtin.command: mv {{ bash_aliases }} {{ bash_aliases_backup }}
       args:
         creates: "{{ bash_aliases_backup }}"
         removes: "{{ bash_aliases }}"
+      when: created_backup_dir.changed # noqa: no-handler
 
     - name: Build modules list
       ansible.builtin.find:
