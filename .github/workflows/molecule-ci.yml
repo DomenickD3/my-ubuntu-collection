@@ -19,8 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          path: "${{ github.repository }}"
+        #with:
+        #  path: "${{ github.repository }}"
 
       - name: Set up Python 3.
         uses: actions/setup-python@v2
@@ -31,7 +31,7 @@ jobs:
         run: pip3 install ansible molecule molecule-plugins[docker] docker pytest
 
       - name: Run Molecule tests.
-        run: molecule test
+        run: pwd
         env:
           working-directory: "${{ github.repository }}"
           PY_COLORS: '1'
