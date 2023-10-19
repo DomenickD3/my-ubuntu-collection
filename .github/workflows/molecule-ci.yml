@@ -9,13 +9,33 @@ on:
       - master
 
 jobs:
-  Test:
-    runs-on: ubuntu-22.04
+  molecule:
+    name: Molecule
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+          - ubuntu2204
+
     steps:
       - uses: actions/checkout@v3
+        # with:
+        #   path: "${{ github.repository }}"
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v2
         with:
-          path: "${{ github.repository }}"
-      - uses: gofrolist/molecule-action@v2
-        with:
-          molecule_working_dir: "${{ github.repository }}"
-          molecule_options: --debug
+          python-version: '3.x'
+
+      - name: Install test dependencies.
+        run: pip3 install ansible molecule molecule-plugins[docker] docker pytest pytest-testinfra
+
+      # - name: test pytest
+      #   run: pytest molecule/default/tests/ubuntu-testinfra.py
+      - name: Run Molecule tests.
+        run: molecule test
+        env:
+          # working-directory: "${{ github.repository }}"
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}
