@@ -31,7 +31,7 @@ jobs:
         run: pip3 install ansible molecule molecule-plugins[docker] docker pytest
 
       - name: test pytest
-        run: pytest tests/ubuntu-testinfra.py
+        run: pytest molecule/default/tests/ubuntu-testinfra.py
       - name: Run Molecule tests.
         run: molecule --debug verify
         env:
