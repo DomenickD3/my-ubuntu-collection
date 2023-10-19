@@ -29,6 +29,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ${{ github.repository }}/molecule/default/tests/requirements.txt
 
+      - name: Run pytest
+        run: | 
+          pytest
+
       - uses: gofrolist/molecule-action@v2
         with:
           molecule_working_dir: "${{ github.repository }}"
