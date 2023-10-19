@@ -33,7 +33,7 @@ jobs:
       # - name: test pytest
       #   run: pytest molecule/default/tests/ubuntu-testinfra.py
       - name: Run Molecule tests.
-        run: molecule --debug verify
+        run: molecule test
         env:
           # working-directory: "${{ github.repository }}"
           PY_COLORS: '1'
