@@ -6,21 +6,3 @@
     - name: Ensure user "{{ configure_user }}" exists
       ansible.builtin.user:
         name: "{{ configure_user }}"
-
-    - name: Install pip
-      ansible.builtin.apt:
-        name: python3-pip
-
-    - name: Install virtualenv
-      ansible.builtin.pip:
-        name: virtualenv
-
-    - name: Install pytest
-      ansible.builtin.pip:
-        name: pytest
-        virtualenv: /tmp/testinfra-venv
-        virtualenv_site_packages: true
-
-    - name: Run tests from venv
-      command: /bin/sh . /tmp/testinfra-venv/bin/activate && pytest ubuntu-testinfra.py
-
