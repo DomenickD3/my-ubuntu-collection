@@ -1,6 +1,6 @@
 # my-ubuntu-collection
 <!-- Add CI and code coverage badges here. Samples included below. -->
-<!-- [![CI](https://github.com/ansible-collections/REPONAMEHERE/workflows/CI/badge.svg?event=push)](https://github.com/ansible-collections/REPONAMEHERE/actions) [![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/REPONAMEHERE)](https://codecov.io/gh/ansible-collections/REPONAMEHERE) -->
+![Molecule CI](https://github.com/domenickd3/my-ubuntu-collection/actions/workflows/molecule-ci.yml/badge.svg)
 
 <!-- Describe the collection and why a user would want to use it. What does the collection do? -->
 This is a collection that works with Ubuntu 22.04. I use this to set up my entire environment from scratch.
