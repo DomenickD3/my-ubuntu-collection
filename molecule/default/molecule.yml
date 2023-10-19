@@ -21,18 +21,18 @@ provisioner:
 scenario:
   name: default
   test_sequence:
-    # - dependency
-    # - cleanup
-    # - destroy
-    # - syntax
-    # - create
-    # - prepare
-    # - converge
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
     # - idempotence
-    # - side_effect
+    - side_effect
     - verify
-    # - cleanup
-    # - destroy
+    - cleanup
+    - destroy
 
 verifier:
   name: ansible
