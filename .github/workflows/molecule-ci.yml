@@ -31,7 +31,7 @@ jobs:
         run: pip3 install ansible molecule molecule-plugins[docker] docker pytest
 
       - name: Run Molecule tests.
-        run: molecule --debug converge
+        run: molecule --debug verify
         env:
           # working-directory: "${{ github.repository }}"
           PY_COLORS: '1'
