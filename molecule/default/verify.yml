@@ -7,8 +7,6 @@
     - name: Execute pytest testinfra tests
       command: pytest tests/ubuntu-testinfra.py
       register: test_results
-      ignore_errors: true
-      no_log: true
       delegate_to: localhost
 
     - debug: var=test_results.stdout_lines
