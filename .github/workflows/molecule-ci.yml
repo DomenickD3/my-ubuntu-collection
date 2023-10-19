@@ -8,6 +8,8 @@ on:
     branches:
       - master
 
+defaults:
+
 jobs:
  molecule:
     name: Molecule
@@ -28,11 +30,12 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies.
-        run: pip3 install ansible molecule molecule-plugins[docker] docker
+        run: pip3 install ansible molecule molecule-plugins[docker] docker pytest
 
       - name: Run Molecule tests.
         run: molecule test
         env:
+          working-directory: "${{ github.repository }}"
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
