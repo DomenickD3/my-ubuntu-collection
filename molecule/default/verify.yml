@@ -5,7 +5,7 @@
   gather_facts: false
   tasks:
     - name: Execute pytest testinfra tests
-      command: python -m pytest molecule/default/tests/ubuntu-testinfra.py
+      command: python -m pytest ./tests/ubuntu-testinfra.py
       register: test_results
       delegate_to: localhost
 
